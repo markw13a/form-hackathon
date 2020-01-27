@@ -1,0 +1,28 @@
+.App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // Remove from DOM so that width and height are calculated based window size rather than on parent size
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    flex: 1;
+}
+
+.field {
+    width: 300px;
+    border: 1px solid #000;
+}
+
+.display-mode {
+    display: flex;
+    flex-direction: column;
+}
+
+.error {
+    color: red;
+}
