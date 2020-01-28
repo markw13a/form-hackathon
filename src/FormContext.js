@@ -1,4 +1,5 @@
 import React, {useReducer} from 'react';
+import debounce from 'lodash.debounce';
 
 const FormStateContext = React.createContext();
 const FormDispatchContext = React.createContext();
@@ -27,12 +28,28 @@ const newSectionSchema = () => JSON.parse(JSON.stringify(sectionSchema));
 const initialState = {
     title: "Untitled form",
     sectionIndex: 0,
+    hasChanges: false,
     sections: [
         {
             ...newSectionSchema()
         }
     ]
 };
+
+const onSave = (form, dispatch) => (
+    fetch('http://amazon.co.uk', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+    })
+    .then(() => dispatch({type: 'setValue', key: 'hasChanges', value: false}))
+    .catch(err => {
+        console.error(err);
+    })
+);
+const debouncedOnSave = debounce(onSave, 5000);
 
 const reducer = (form, action) => {
     switch (action.type) {
@@ -44,7 +61,6 @@ const reducer = (form, action) => {
             }
             return {...form, [key]: value};
         }
-
         case 'addNewSection': {
             let {sections} = form;
             // Add new section then switch to it
@@ -54,7 +70,8 @@ const reducer = (form, action) => {
                 sections: [
                     ...sections, 
                     {...newSectionSchema()}
-                ] 
+                ] ,
+                hasChanges: true
             };   
         }
         case 'deleteSection': {
@@ -67,7 +84,6 @@ const reducer = (form, action) => {
             }
 
             sections.splice(sectionIndex, 1);
-            console.warn({sections})
             return {
                 ...form,
                 sectionIndex: 
@@ -75,7 +91,8 @@ const reducer = (form, action) => {
                         ? 0
                         : form.sectionIndex - 1
                         ,
-                sections
+                sections,
+                hasChanges: true
             };
         }
         case 'switchToNextSection': {
@@ -97,7 +114,11 @@ const reducer = (form, action) => {
             const section = sections[sectionIndex];            
             section.controls = [...section.controls, {...controlSchema}];
 
-            return {...form, sections: [...sections]};
+            return {
+                ...form, 
+                sections: [...sections],
+                hasChanges: true
+            };
         }
 
         case 'addNewStaticField': {
@@ -106,7 +127,11 @@ const reducer = (form, action) => {
             const section = sections[sectionIndex];
             section.controls = [...section.controls, {...staticSchema}];
 
-            return {...form, sections: [...sections]};
+            return {
+                ...form, 
+                sections: [...sections],
+                hasChanges: true
+            };
         }
 
         case 'editFieldValue': {
@@ -115,7 +140,7 @@ const reducer = (form, action) => {
             const {value, index, key} = action;
             const section = form.sections[sectionIndex];
             const controls = [...section.controls];
-            console.warn({form, action});
+
             if(!section || !controls || !controls[index]) {
                 throw new Error(`Section or control specified does not appear to exist. Section: ${section}, controls: ${controls}`);
             }
@@ -126,7 +151,11 @@ const reducer = (form, action) => {
 
             controls[index][key] = value; 
 
-            return {...form, sections: [...form.sections]};
+            return {
+                ...form, 
+                sections: [...form.sections],
+                hasChanges: true
+            };
         }
 
         case 'deleteControl': {
@@ -136,7 +165,11 @@ const reducer = (form, action) => {
             const section = form.sections[sectionIndex];
             section.controls.splice(index, 1);
 
-            return {...form, sections: [...form.sections]};
+            return {
+                ...form, 
+                sections: [...form.sections],
+                hasChanges: true
+            };
         }
 
         default: {
@@ -147,6 +180,10 @@ const reducer = (form, action) => {
 
 const FormProvider = ({children}) => {
     const [form, dispatch] = useReducer(reducer, initialState);
+
+    if(form.hasChanges) {
+        debouncedOnSave(form, dispatch);
+    }
 
     return (
         <FormStateContext.Provider value={form}>
