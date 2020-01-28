@@ -6,13 +6,13 @@ const FormDispatchContext = React.createContext();
 const controlSchema = {
     label: null,
     required: false,
-    type: "text"
+    type: "text",
 };
 
 const staticSchema = {
     label: null,
     subHeader: null,
-    static: true
+    type: "title",
 };
 
 // Will need to deep copy when using to avoid the same "controls" array being referenced by multiple sections
@@ -60,19 +60,22 @@ const reducer = (form, action) => {
         }
         case 'deleteSection': {
             // Delete given section and move to the next one down
-            const {sectionIndex} = form;
+            const {sections, sectionIndex} = form;
 
-            if(sectionIndex === 0) {
+            if(sections.length === 0) {
                 console.warn("Cannot remove your last section. Aborting...");
-                return;
+                return form;
             }
 
-            const {sections} = form;
             sections.splice(sectionIndex, 1);
-
+            console.warn({sections})
             return {
                 ...form,
-                sectionIndex: form.sectionIndex - 1,
+                sectionIndex: 
+                    sectionIndex === 0 
+                        ? 0
+                        : form.sectionIndex - 1
+                        ,
                 sections
             };
         }
@@ -113,7 +116,7 @@ const reducer = (form, action) => {
             const {value, index, key} = action;
             const section = form.sections[sectionIndex];
             const controls = [...section.controls];
-
+            console.warn({form, action});
             if(!section || !controls || !controls[index]) {
                 throw new Error(`Section or control specified does not appear to exist. Section: ${section}, controls: ${controls}`);
             }

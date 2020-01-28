@@ -1,7 +1,8 @@
 import React from 'react';
 import {FormProvider} from './FormContext';
 import FormTitleCapture from './FormTitleCapture';
-import {AddNewField, AddNewStaticText, Section, SectionControls} from './fields/Field';
+import {AddNewField} from './Field';
+import {Section, SectionControls} from './Sections';
 import './style/main.scss';
 
 const App = () => (
@@ -12,7 +13,6 @@ const App = () => (
 				<SectionControls />
 				<Section />
 				<AddNewField />
-				<AddNewStaticText />
 			</FormProvider>
 		</div>
 	</div>

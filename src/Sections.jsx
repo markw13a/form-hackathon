@@ -1,52 +1,6 @@
 import React from 'react';
-import {useFormState, useForm, useFormDispatch} from '../FormContext';
-import InputField from './InputField';
-import StaticField from './StaticField';
-
-const AddNewField = () => {
-    const dispatch = useFormDispatch();
-
-    return (
-        <button onClick={() => dispatch({type: "addNewInputField"})}>
-            Add field
-        </button>
-    );
-};
-
-const AddNewStaticText = () => {
-    const dispatch = useFormDispatch();
-
-    return (
-        <button onClick={() => dispatch({type: "addNewStaticField"})}>
-            Add header
-        </button>
-    );
-};
-
-const FormFields = ({controls}) => {
-
-    if(controls.length === 0) {
-        return null;
-    }
-
-    return (
-        <div>
-            {
-                controls.map((control, index) => (
-                    control.static
-                    ? <StaticField {...control} index={index} />
-                    : (
-                        <InputField  
-                            {...control} 
-                            index={index} 
-                        />
-                    )
-                ))
-            }
-        </div>
-
-    );
-};
+import {useFormState, useForm} from './FormContext';
+import {FormFields} from './Field';
 
 const Section = () => {
     const form = useFormState();
@@ -105,8 +59,6 @@ const SectionControls = () => {
 };
 
 export {
-    AddNewField,
-    AddNewStaticText,
     Section,
     SectionControls
 };
