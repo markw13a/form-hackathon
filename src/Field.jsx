@@ -12,7 +12,7 @@ const AddNewField = () => {
     );
 };
 
-const EditStatic = ({label, subHeader, index, type}) => {
+const EditStatic = ({label, index, type}) => {
     const dispatch = useFormDispatch();
     
     return (
@@ -22,12 +22,6 @@ const EditStatic = ({label, subHeader, index, type}) => {
                 onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "label", index})}
                 placeholder="Header..."
                 value={label}
-            />
-            <input 
-                type="text"
-                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "subHeader", index})}
-                placeholder="Sub-header..."
-                value={subHeader}
             />
             <div className="type">
                 <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', value: e.target.value})} value={type}>
@@ -137,10 +131,9 @@ const NumberComp = ({label, required}) => (
     </>
 );
 
-const Title = ({label, subHeader}) => (
+const Title = ({label}) => (
     <div className="display-mode">
         <h3>{label}</h3>
-        <p>{subHeader}</p>
     </div>
 );
 

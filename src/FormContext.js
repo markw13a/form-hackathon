@@ -11,7 +11,6 @@ const controlSchema = {
 
 const staticSchema = {
     label: null,
-    subHeader: null,
     type: "title",
 };
 
