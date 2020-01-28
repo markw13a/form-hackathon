@@ -5,11 +5,15 @@ const FormTitleCapture = () => {
     const [form, dispatch] = useForm();
 
     return (
-        <input 
-            type="text"
-            onChange={e => dispatch({type: "setValue", key: "title", value: e.target.value})}
-            value={form.title}
-        />
+        <div id="form-name-section">
+            <input 
+                type="text"
+                onChange={e => dispatch({type: "setValue", key: "title", value: e.target.value})}
+                value={form.title}
+                id="form-name"
+            />
+            <label for="form-name"><i class="fa fa-edit icon"></i><span className="hide">Edit Form Name</span></label>
+        </div>
     );
 };
 
