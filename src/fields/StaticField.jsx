@@ -2,7 +2,7 @@ import React from 'react';
 import {useForm} from '../FormContext';
 import {useIsInFocus} from '../common/Hooks';
 
-const EditComponent = ({label, index}) => {
+const EditComponent = ({label, subHeader, index}) => {
     const [{sectionIndex}, dispatch] = useForm();
     
     return (
@@ -10,15 +10,23 @@ const EditComponent = ({label, index}) => {
             <input 
                 type="text"
                 onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "label", sectionIndex, index})}
+                placeholder="Header..."
                 value={label}
+            />
+            <input 
+                type="text"
+                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "subHeader", sectionIndex, index})}
+                placeholder="Sub-header..."
+                value={subHeader}
             />
         </div>
     );
 };
 
-const DisplayComponent = ({label}) => (
+const DisplayComponent = ({label, subHeader}) => (
     <div className="display-mode">
         <h3>{label}</h3>
+        <p>{subHeader}</p>
     </div>
 );
 

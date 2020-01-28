@@ -11,6 +11,7 @@ const controlSchema = {
 
 const staticSchema = {
     label: null,
+    subHeader: null,
     static: true
 };
 
@@ -72,7 +73,7 @@ const reducer = (form, action) => {
 
         case 'addNewInputField': {
             const {sectionIndex} = form;
-            const sections = {...form.sections};
+            const sections = [...form.sections];
             const section = sections[sectionIndex];            
             section.controls = [...section.controls, {...controlSchema}];
 
@@ -115,7 +116,7 @@ const reducer = (form, action) => {
 
 const FormProvider = ({children}) => {
     const [form, dispatch] = useReducer(reducer, initialState);
-    console.warn(form);
+
     return (
         <FormStateContext.Provider value={form}>
             <FormDispatchContext.Provider value={dispatch}>
