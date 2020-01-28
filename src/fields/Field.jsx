@@ -92,6 +92,14 @@ const SectionControls = () => {
                     </button>
                 )
             }
+            {
+                numberOfSectons > 1
+                && (
+                    <button onClick={() => dispatch({type: "deleteSection"})}>
+                        Delete this section
+                    </button>
+                )
+            }
         </>
     );
 };

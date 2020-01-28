@@ -1,24 +1,29 @@
 import React from 'react';
-import {useForm} from '../FormContext';
+import {useFormDispatch} from '../FormContext';
 import {useIsInFocus} from '../common/Hooks';
 
 const EditComponent = ({label, subHeader, index}) => {
-    const [{sectionIndex}, dispatch] = useForm();
+    const dispatch = useFormDispatch();
     
     return (
         <div className="edit-mode">
             <input 
                 type="text"
-                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "label", sectionIndex, index})}
+                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "label", index})}
                 placeholder="Header..."
                 value={label}
             />
             <input 
                 type="text"
-                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "subHeader", sectionIndex, index})}
+                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "subHeader", index})}
                 placeholder="Sub-header..."
                 value={subHeader}
             />
+            <div className="remove">
+                <button onClick={() => dispatch({type: 'deleteControl', index})}>
+                    Delete
+                </button>
+            </div>
         </div>
     );
 };

@@ -58,6 +58,24 @@ const reducer = (form, action) => {
                 ] 
             };   
         }
+        case 'deleteSection': {
+            // Delete given section and move to the next one down
+            const {sectionIndex} = form;
+
+            if(sectionIndex === 0) {
+                console.warn("Cannot remove your last section. Aborting...");
+                return;
+            }
+
+            const {sections} = form;
+            sections.splice(sectionIndex, 1);
+
+            return {
+                ...form,
+                sectionIndex: form.sectionIndex - 1,
+                sections
+            };
+        }
         case 'switchToNextSection': {
             return {
                 ...form, 
@@ -91,7 +109,8 @@ const reducer = (form, action) => {
 
         case 'editFieldValue': {
             // HACK: using index to identify a control could back-fire
-            const {value, index, key, sectionIndex} = action;
+            const {sectionIndex} = form;
+            const {value, index, key} = action;
             const section = form.sections[sectionIndex];
             const controls = [...section.controls];
 
@@ -104,6 +123,16 @@ const reducer = (form, action) => {
             }
 
             controls[index][key] = value; 
+
+            return {...form, sections: [...form.sections]};
+        }
+
+        case 'deleteControl': {
+            const {sectionIndex} = form;
+            const {index} = action;
+
+            const section = form.sections[sectionIndex];
+            section.controls.splice(index, 1);
 
             return {...form, sections: [...form.sections]};
         }
