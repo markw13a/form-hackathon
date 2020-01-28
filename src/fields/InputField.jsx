@@ -1,21 +1,23 @@
 import React from 'react';
 import {useFormDispatch} from '../FormContext';
+import {useNonFormDataState} from '../NonFormDataContext';
 import {useIsInFocus} from '../common/Hooks';
 
 const EditControl = ({label, index, required, type}) => {
     const dispatch = useFormDispatch();
-    
+    const {sectionIndex} = useNonFormDataState();
+
     return (
         <div className="edit-mode">
             <label>
                 <input 
-                    onChange={e => dispatch({type: 'editFieldValue', index, key: 'label', value: e.target.value})}
+                    onChange={e => dispatch({type: 'editFieldValue', index, key: 'label', sectionIndex, value: e.target.value})}
                     type="text"
                     value={label}
                 />
             </label>
             <div className="type">
-                <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', value: e.target.value})} value={type}>
+                <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', sectionIndex, value: e.target.value})} value={type}>
                     <option value="text">
                         Text input
                     </option>
@@ -27,7 +29,7 @@ const EditControl = ({label, index, required, type}) => {
                     <input 
                         type="checkbox"
                         checked={required}
-                        onChange={() => dispatch({type: 'editFieldValue', index, key: 'required', value: !required})}
+                        onChange={() => dispatch({type: 'editFieldValue', index, key: 'required', sectionIndex, value: !required})}
                     />
                 </label>
             </div>

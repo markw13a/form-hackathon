@@ -1,15 +1,17 @@
 import React from 'react';
 import {useFormDispatch} from '../FormContext';
+import {useNonFormDataState} from '../NonFormDataContext';
 import {useIsInFocus} from '../common/Hooks';
 
 const EditComponent = ({label, index}) => {
     const dispatch = useFormDispatch();
+    const {sectionIndex} = useNonFormDataState();
     
     return (
         <div className="edit-mode">
             <input 
                 type="text"
-                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "label", index})}
+                onChange={e => dispatch({type: "editFieldValue", value: e.target.value, key: "label", sectionIndex, index})}
                 value={label}
             />
         </div>

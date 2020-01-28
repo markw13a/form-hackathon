@@ -1,13 +1,15 @@
 import React from 'react';
 import {useFormDispatch, useFormState} from '../FormContext';
+import {useNonFormDataState} from '../NonFormDataContext';
 import InputField from './InputField';
 import StaticField from './StaticField';
 
 const AddNewField = () => {
     const dispatch = useFormDispatch();
+    const {sectionIndex} = useNonFormDataState();
 
     return (
-        <button onClick={() => dispatch({type: "addNewInputField"})}>
+        <button onClick={() => dispatch({type: "addNewInputField", sectionIndex})}>
             Add field
         </button>
     );
@@ -15,25 +17,25 @@ const AddNewField = () => {
 
 const AddNewStaticText = () => {
     const dispatch = useFormDispatch();
+    const {sectionIndex} = useNonFormDataState();
     
     return (
-        <button onClick={() => dispatch({type: "addNewStaticField"})}>
+        <button onClick={() => dispatch({type: "addNewStaticField", sectionIndex})}>
             Add header
         </button>
     );
 };
 
-const FormFields = () => {
-    const form = useFormState();
+const FormFields = ({controls}) => {
 
-    if(form.controls.length === 0) {
+    if(controls.length === 0) {
         return null;
     }
 
     return (
         <div>
             {
-                form.controls.map((control, index) => (
+                controls.map((control, index) => (
                     control.static
                     ? <StaticField {...control} index={index} />
                     : (
@@ -49,8 +51,23 @@ const FormFields = () => {
     );
 };
 
+const Section = () => {
+    const form = useFormState();
+    const {sectionIndex} = useNonFormDataState();
+
+    const section = form.sections[sectionIndex];
+
+    if(!section) {
+        throw new Error(`No data found for requested section at index ${sectionIndex}`);
+    }
+
+    return (
+        <FormFields controls={section.controls} />
+    );
+};
+
 export {
     AddNewField,
     AddNewStaticText,
-    FormFields
+    Section
 };

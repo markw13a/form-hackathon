@@ -3,11 +3,6 @@ import React, {useReducer} from 'react';
 const FormStateContext = React.createContext();
 const FormDispatchContext = React.createContext();
 
-const initialState = {
-    title: "Untitled form",
-    controls: []
-}
-
 const controlSchema = {
     label: null,
     required: false,
@@ -17,6 +12,23 @@ const controlSchema = {
 const staticSchema = {
     label: null,
     static: true
+};
+
+const sectionSchema = {
+    controls: [
+        {
+            ...staticSchema
+        }
+    ]
+};
+
+const initialState = {
+    title: "Untitled form",
+    sections: [
+        {
+            ...sectionSchema
+        }
+    ]
 };
 
 const reducer = (form, action) => {
@@ -31,21 +43,34 @@ const reducer = (form, action) => {
         }
 
         case 'addNewInputField': {
-            const {controls} = form;
+            const {sectionIndex} = action;
+
+            const section = form.sections[sectionIndex];
+            const {controls} = section;
             controls.push({...controlSchema});
+
             return {...form, controls};
         }
 
         case 'addNewStaticField': {
-            const {controls} = form;
+            const {sectionIndex} = action;
+
+            const section = form.sections[sectionIndex];
+            const {controls} = section;
             controls.push({...staticSchema});
+
             return {...form, controls};
         }
 
         case 'editFieldValue': {
             // HACK: using index to identify a control could back-fire
-            const {value, index, key} = action;
-            const {controls} = form;
+            const {value, index, key, sectionIndex} = action;
+            const section = form.sections[sectionIndex];
+            const {controls} = section;
+
+            if(!section || !controls || !controls[index]) {
+                throw new Error(`Section or control specified does not appear to exist. Section: ${section}, controls: ${controls}`);
+            }
 
             if(value === undefined || index === undefined || !key) {
                 throw new Error(`editFieldValue must be called with a value, key and index. You provided value: ${value}, key: ${key}, index: ${index}`);
