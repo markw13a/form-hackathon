@@ -6,9 +6,11 @@ const AddNewField = () => {
     const dispatch = useFormDispatch();
 
     return (
-        <button onClick={() => dispatch({type: "addNewInputField"})}>
-            Add field
-        </button>
+        <div className="add-button">
+            <button onClick={() => dispatch({type: "addNewInputField"})}>
+                <i className="fa fa-plus icon"></i>
+            </button>
+        </div>
     );
 };
 
@@ -107,7 +109,7 @@ const Text = ({label, required}) => (
             {label}
             {
                 required
-                && <span className="error">*</span>
+                && <span className="error">REQUIIRED</span>
             }
         </label>
         <input 
@@ -122,7 +124,7 @@ const NumberComp = ({label, required}) => (
             {label}
             {
                 required
-                && <span className="error">*</span>
+                && <span className="error">REQUIIRED</span>
             }
         </label>
         <input 
@@ -131,11 +133,13 @@ const NumberComp = ({label, required}) => (
     </>
 );
 
-const Title = ({label}) => (
+const Title = ({label}) => {
+    return (
     <div className="display-mode">
         <h3>{label}</h3>
     </div>
-);
+    )
+}
 
 const controlForType = {
     text: Text,

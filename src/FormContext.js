@@ -10,7 +10,7 @@ const controlSchema = {
 };
 
 const staticSchema = {
-    label: null,
+    label: "Heading",
     type: "title",
 };
 

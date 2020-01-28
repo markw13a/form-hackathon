@@ -11,9 +11,11 @@ const App = () => (
 		<div className="content">
 			<FormProvider>
 				<FormTitleCapture />
+				<div className="section">
 				<SectionControls />
 				<Section />
 				<AddNewField />
+				</div>
 			</FormProvider>
 		</div>
 	</div>

@@ -1,5 +1,6 @@
 html {background: #F7F7F7 }
 body * { font-family: 'Open Sans', sans-serif; font-size:12px; color:#000000DE;}
+
 .hide { display:none;}
 .App {
     display: flex;
@@ -19,22 +20,23 @@ header h1{color:#fff; font-size:20px}
 #form-name-section {border-bottom:1px solid #D5D5D5; line-height: 96px; background-color: #fff; padding:0 72px}
 #form-name { font-size:24px; border:0 none; margin:0 }
 
+/* Edit mode */
+.field {background:#fff; border:1px solid #D5D5D5; padding:20px}
+.field input {border:0 none}
+.add-button button {border:0 none; background:none; font-size:20px; position: absolute; right:0}
 
 .content {
     flex: 1;
     padding:0;
 }
 
-.field {
-    width: 300px;
-    border: 1px solid #000;
-}
-
+.section {margin: 0 auto; width:80%;}
 .display-mode {
-    display: flex;
-    flex-direction: column;
+   position: relative;
 }
 
 .error {
     color: red;
+    position:absolute;
+    right:0;
 }
