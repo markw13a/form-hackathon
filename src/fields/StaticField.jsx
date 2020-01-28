@@ -22,14 +22,15 @@ const DisplayComponent = ({label}) => (
     </div>
 );
 
+// Need to use tabIndex for the element to be "focusable"
 const StaticField = props => {
     const {isInFocus, onBlur, onFocus} = useIsInFocus();
-    console.warn({isInFocus});
     return (
         <div 
             className="field"
             onBlur={onBlur}
             onFocus={onFocus}
+            tabIndex="0"
         >
             {
                 isInFocus

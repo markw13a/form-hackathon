@@ -8,6 +8,17 @@ const initialState = {
     controls: []
 }
 
+const controlSchema = {
+    label: null,
+    required: false,
+    type: "text"
+};
+
+const staticSchema = {
+    label: null,
+    static: true
+};
+
 const reducer = (form, action) => {
     switch (action.type) {
         case 'setValue': {
@@ -21,20 +32,13 @@ const reducer = (form, action) => {
 
         case 'addNewInputField': {
             const {controls} = form;
-            controls.push({
-                label: null,
-                required: false,
-                type: "text"
-            });
+            controls.push({...controlSchema});
             return {...form, controls};
         }
 
         case 'addNewStaticField': {
             const {controls} = form;
-            controls.push({
-                label: null,
-                static: true
-            });
+            controls.push({...staticSchema});
             return {...form, controls};
         }
 
