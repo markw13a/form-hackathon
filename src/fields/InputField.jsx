@@ -1,11 +1,9 @@
 import React from 'react';
-import {useFormDispatch} from '../FormContext';
-import {useNonFormDataState} from '../NonFormDataContext';
+import {useForm} from '../FormContext';
 import {useIsInFocus} from '../common/Hooks';
 
 const EditControl = ({label, index, required, type}) => {
-    const dispatch = useFormDispatch();
-    const {sectionIndex} = useNonFormDataState();
+    const [{sectionIndex}, dispatch] = useForm();
 
     return (
         <div className="edit-mode">
@@ -20,6 +18,9 @@ const EditControl = ({label, index, required, type}) => {
                 <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', sectionIndex, value: e.target.value})} value={type}>
                     <option value="text">
                         Text input
+                    </option>
+                    <option value="number">
+                        Number input
                     </option>
                 </select>
             </div>
@@ -52,8 +53,24 @@ const Text = ({label, required}) => (
     </>
 );
 
+const NumberComp = ({label, required}) => (
+    <>
+        <label>
+            {label}
+            {
+                required
+                && <span className="error">*</span>
+            }
+        </label>
+        <input 
+            type="number"
+        />
+    </>
+);
+
 const controlForType = {
     text: Text,
+    number: NumberComp
 };
 
 const DisplayControl = ({type, ...controlProps}) => {

@@ -1,11 +1,9 @@
 import React from 'react';
-import {useFormDispatch} from '../FormContext';
-import {useNonFormDataState} from '../NonFormDataContext';
+import {useForm} from '../FormContext';
 import {useIsInFocus} from '../common/Hooks';
 
 const EditComponent = ({label, index}) => {
-    const dispatch = useFormDispatch();
-    const {sectionIndex} = useNonFormDataState();
+    const [{sectionIndex}, dispatch] = useForm();
     
     return (
         <div className="edit-mode">

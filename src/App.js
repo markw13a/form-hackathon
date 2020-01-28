@@ -1,8 +1,7 @@
 import React from 'react';
 import {FormProvider} from './FormContext';
-import {NonFormDataProvider} from './NonFormDataContext';
 import FormTitleCapture from './FormTitleCapture';
-import {AddNewField, AddNewStaticText, Section} from './fields/Field';
+import {AddNewField, AddNewStaticText, Section, SectionControls} from './fields/Field';
 import './style/main.scss';
 
 const App = () => (
@@ -10,11 +9,10 @@ const App = () => (
 		<div className="content">
 			<FormProvider>
 				<FormTitleCapture />
-				<NonFormDataProvider>
-					<Section />
-					<AddNewField />
-					<AddNewStaticText />
-				</NonFormDataProvider>
+				<SectionControls />
+				<Section />
+				<AddNewField />
+				<AddNewStaticText />
 			</FormProvider>
 		</div>
 	</div>

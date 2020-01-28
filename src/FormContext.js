@@ -14,6 +14,7 @@ const staticSchema = {
     static: true
 };
 
+// Will need to deep copy when using to avoid the same "controls" array being referenced by multiple sections
 const sectionSchema = {
     controls: [
         {
@@ -21,12 +22,14 @@ const sectionSchema = {
         }
     ]
 };
+const newSectionSchema = () => JSON.parse(JSON.stringify(sectionSchema));
 
 const initialState = {
     title: "Untitled form",
+    sectionIndex: 0,
     sections: [
         {
-            ...sectionSchema
+            ...newSectionSchema()
         }
     ]
 };
@@ -42,31 +45,54 @@ const reducer = (form, action) => {
             return {...form, [key]: value};
         }
 
+        case 'addNewSection': {
+            let {sections} = form;
+            // Add new section then switch to it
+            return {
+                ...form,
+                sectionIndex: sections.length,
+                sections: [
+                    ...sections, 
+                    {...newSectionSchema()}
+                ] 
+            };   
+        }
+        case 'switchToNextSection': {
+            return {
+                ...form, 
+                sectionIndex: form.sectionIndex + 1
+            };
+        }
+        case 'switchToPreviousSection': {
+            return {
+                ...form, 
+                sectionIndex: form.sectionIndex - 1
+            };
+        }
+
         case 'addNewInputField': {
-            const {sectionIndex} = action;
+            const {sectionIndex} = form;
+            const sections = {...form.sections};
+            const section = sections[sectionIndex];            
+            section.controls = [...section.controls, {...controlSchema}];
 
-            const section = form.sections[sectionIndex];
-            const {controls} = section;
-            controls.push({...controlSchema});
-
-            return {...form, controls};
+            return {...form, sections: [...sections]};
         }
 
         case 'addNewStaticField': {
-            const {sectionIndex} = action;
+            const {sectionIndex} = form;
+            const sections = [...form.sections];
+            const section = sections[sectionIndex];
+            section.controls = [...section.controls, {...staticSchema}];
 
-            const section = form.sections[sectionIndex];
-            const {controls} = section;
-            controls.push({...staticSchema});
-
-            return {...form, controls};
+            return {...form, sections: [...sections]};
         }
 
         case 'editFieldValue': {
             // HACK: using index to identify a control could back-fire
             const {value, index, key, sectionIndex} = action;
             const section = form.sections[sectionIndex];
-            const {controls} = section;
+            const controls = [...section.controls];
 
             if(!section || !controls || !controls[index]) {
                 throw new Error(`Section or control specified does not appear to exist. Section: ${section}, controls: ${controls}`);
@@ -78,7 +104,7 @@ const reducer = (form, action) => {
 
             controls[index][key] = value; 
 
-            return {...form, controls};
+            return {...form, sections: [...form.sections]};
         }
 
         default: {

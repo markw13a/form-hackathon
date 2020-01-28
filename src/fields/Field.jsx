@@ -1,15 +1,13 @@
 import React from 'react';
-import {useFormDispatch, useFormState} from '../FormContext';
-import {useNonFormDataState} from '../NonFormDataContext';
+import {useFormState, useForm, useFormDispatch} from '../FormContext';
 import InputField from './InputField';
 import StaticField from './StaticField';
 
 const AddNewField = () => {
     const dispatch = useFormDispatch();
-    const {sectionIndex} = useNonFormDataState();
 
     return (
-        <button onClick={() => dispatch({type: "addNewInputField", sectionIndex})}>
+        <button onClick={() => dispatch({type: "addNewInputField"})}>
             Add field
         </button>
     );
@@ -17,10 +15,9 @@ const AddNewField = () => {
 
 const AddNewStaticText = () => {
     const dispatch = useFormDispatch();
-    const {sectionIndex} = useNonFormDataState();
-    
+
     return (
-        <button onClick={() => dispatch({type: "addNewStaticField", sectionIndex})}>
+        <button onClick={() => dispatch({type: "addNewStaticField"})}>
             Add header
         </button>
     );
@@ -53,10 +50,10 @@ const FormFields = ({controls}) => {
 
 const Section = () => {
     const form = useFormState();
-    const {sectionIndex} = useNonFormDataState();
+    const {sectionIndex} = form;
 
     const section = form.sections[sectionIndex];
-
+    
     if(!section) {
         throw new Error(`No data found for requested section at index ${sectionIndex}`);
     }
@@ -66,8 +63,42 @@ const Section = () => {
     );
 };
 
+const SectionControls = () => {
+    const [form, dispatch] = useForm();
+
+    const {sectionIndex} = form;
+    const numberOfSectons = form.sections.length;
+
+    return (
+        <>
+            <button onClick={() => dispatch({type: "addNewSection"})}>
+                Add new section
+            </button>
+            {
+                numberOfSectons > 1
+                && sectionIndex !== 0
+                && (
+                    <button onClick={() => dispatch({type: "switchToPreviousSection"})}>
+                        To Section {sectionIndex - 1}
+                    </button>
+                )
+            }
+            {
+                numberOfSectons > 1
+                && sectionIndex !== numberOfSectons - 1
+                && (
+                    <button onClick={() => dispatch({type: "switchToNextSection"})}>
+                        To Section {sectionIndex + 1}
+                    </button>
+                )
+            }
+        </>
+    );
+};
+
 export {
     AddNewField,
     AddNewStaticText,
-    Section
+    Section,
+    SectionControls
 };
