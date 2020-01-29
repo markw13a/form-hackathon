@@ -95,7 +95,12 @@ header h1{color:#fff; font-size:20px}
 #form-name { font-size: $medium_font; border:0 none; margin:0 }
 
 /* Edit mode */
-.field {background:#fff; border:1px solid #D5D5D5; padding:30px}
+.field {
+    background:#fff; 
+    border:1px solid #D5D5D5; 
+    padding:30px;
+    margin-bottom: 1rem;
+}
 .field input {border:0 none; border-bottom:1px solid #D5D5D5; height:40px; width:100%}
 .add-button {
     display: flex;
