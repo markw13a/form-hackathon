@@ -8,7 +8,7 @@ const AddNewField = () => {
     return (
         <div className="add-button">
             <button onClick={() => dispatch({type: "addNewInputField"})}>
-                <i className="fa fa-plus icon"></i>
+                <i className="fa fa-plus icon"></i> Add a control
             </button>
         </div>
     );
@@ -88,7 +88,7 @@ const EditInput = ({type, index, label, required}) => {
                             checked={required}
                             onChange={() => dispatch({type: 'editFieldValue', index, key: 'required', value: !required})}
                         />
-                        <label for="toggle">Required Field</label>
+                        <label for="toggle">Required</label>
                     </div>
                     <div className="copy">
                         <i className="fa fa-copy icon"></i>
