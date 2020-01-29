@@ -36,7 +36,18 @@ header h1{color:#fff; font-size:20px}
 /* Edit mode */
 .field {background:#fff; border:1px solid #D5D5D5; padding:30px}
 .field input {border:0 none;}
-.add-button button {border:0 none; background:none; font-size:20px; position: absolute; right:0}
+.add-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    button {
+        cursor: pointer;
+        border: none; background:none; font-size:36px;
+        .icon {font-size: 24px;}
+    }
+}
 .remove button{border:0 none; background:none;}
 .editable-functions { text-align:right; padding:10px 0;}
 .editable-functions div.type  {float:left; }
