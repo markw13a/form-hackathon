@@ -12,7 +12,7 @@ const FormTitleCapture = () => {
                 value={form.title}
                 id="form-name"
             />
-            <label for="form-name"><i class="fa fa-edit icon"></i><span className="hide">Edit Form Name</span></label>
+            <label htmlFor="form-name"><i className="fa fa-edit icon"></i><span className="hide">Edit Form Name</span></label>
         </div>
     );
 };
