@@ -8,7 +8,8 @@ const AddNewField = () => {
     return (
         <div className="add-button">
             <button onClick={() => dispatch({type: "addNewInputField"})}>
-                <i className="fa fa-plus icon"></i> Add a control
+                <i className="fa fa-plus icon"></i>
+                <span> Add a control </span>
             </button>
         </div>
     );
