@@ -8,7 +8,7 @@ const Section = () => {
     const {sectionIndex} = form;
 
     const section = form.sections[sectionIndex];
-    console.warn(form);
+
     if(!section) {
         throw new Error(`No data found for requested section at index ${sectionIndex}`);
     }

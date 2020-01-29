@@ -30,6 +30,7 @@ header h1{color:#fff; font-size:20px}
 
 /* Form Name section */
 #form-name-section {
+    position: relative;
     border-bottom:1px solid #D5D5D5; 
     line-height: 96px; 
     background-color: #fff; 
@@ -199,4 +200,19 @@ header h1{color:#fff; font-size:20px}
 
 i.fa {
     cursor: pointer;
+}
+
+.save-message {
+    position: absolute;
+    top: 0;
+    right: 0;
+    line-height: initial;
+    height: 16px;
+    padding: 8px;
+    margin: 8px;
+    background-color: #cde2a9;
+    color: #4e633a;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: bold;
 }

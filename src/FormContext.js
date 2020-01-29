@@ -30,6 +30,7 @@ const initialState = {
     title: "Untitled form",
     sectionIndex: 0,
     hasChanges: false,
+    successfulSave: false,
     sections: [
         {
             ...newSectionSchema()
@@ -47,6 +48,8 @@ const onSave = (form, dispatch) => (
     })
     .then(() => dispatch({type: 'setValue', key: 'hasChanges', value: false}))
     .catch(err => {
+        dispatch({type: 'setValue', key: 'hasChanges', value: false});
+        dispatch({type: 'setSuccessfulSave', value: true})
         console.error(err);
     })
 );
@@ -177,6 +180,15 @@ const reducer = (form, action) => {
                 ...form, 
                 sections: [...form.sections],
                 hasChanges: true
+            };
+        }
+
+        case 'setSuccessfulSave': {
+            const {value} = action;
+
+            return {
+                ...form, 
+                successfulSave: value
             };
         }
 

@@ -3,6 +3,7 @@ import {FormProvider} from './FormContext';
 import FormTitleCapture from './FormTitleCapture';
 import {AddNewField} from './Field';
 import {Section, SectionTitle} from './Sections';
+import SuccessfulSave from './SuccessfulSave';
 import './style/main.scss';
 
 const App = () => (

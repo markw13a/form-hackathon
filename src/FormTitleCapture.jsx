@@ -1,4 +1,5 @@
 import React from 'react';
+import SuccessfulSave from './SuccessfulSave';
 import {useForm} from './FormContext';
 import {useIsInFocus} from './common/Hooks';
 
@@ -19,6 +20,7 @@ const FormTitleCapture = () => {
                 value={form.title}
                 id="form-name"
             />
+            <SuccessfulSave />
         </div>
     );
 };
