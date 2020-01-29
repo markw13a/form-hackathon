@@ -26,6 +26,7 @@ const SectionName = () => {
 
     return (
         <div 
+            className="name-section"
             onFocus={onFocus} 
             onBlur={onBlur}
         >
