@@ -13,9 +13,9 @@ const App = () => (
 				<FormTitleCapture />
 				<SectionTitle />
 				<div className="section">
-				<SectionControls />
-				<Section />
-				<AddNewField />
+					<SectionControls />
+					<Section />
+					<AddNewField />
 				</div>
 			</FormProvider>
 		</div>

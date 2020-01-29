@@ -20,7 +20,16 @@ header {background-color:#2196F3;  padding:0 72px; height:56px;}
 header h1{color:#fff; font-size:20px}
 
 /* Form Name section */
-#form-name-section {border-bottom:1px solid #D5D5D5; line-height: 96px; background-color: #fff; padding:0 72px}
+#form-name-section {
+    border-bottom:1px solid #D5D5D5; 
+    line-height: 96px; 
+    background-color: #fff; 
+    padding: 0 72px;
+
+    .default {
+        color: #D5D5D5;
+    }
+}
 #form-name { font-size:24px; border:0 none; margin:0 }
 
 /* Edit mode */
