@@ -4,6 +4,7 @@ body * { font-family: 'Open Sans', sans-serif; font-size:12px; color:#000000DE;}
 .icon {font-size:16px;}
 .field input, .field select {border:1px solid #D5D5D5; padding:5px}
 .field select {width:200px}
+label {font-weight:bold}
 
 .hide { display:none;}
 .App {
@@ -26,7 +27,7 @@ header h1{color:#fff; font-size:20px}
 
 /* Edit mode */
 .field {background:#fff; border:1px solid #D5D5D5; padding:30px}
-.field input {border:0 none;}
+.field input {border:0 none; border-bottom:1px solid #D5D5D5; height:40px; width:100%}
 .add-button button {border:0 none; background:none; font-size:20px; position: absolute; right:0}
 .remove button{border:0 none; background:none;}
 .editable-functions { text-align:right; padding:10px 0;}
