@@ -6,9 +6,11 @@ const AddNewField = () => {
     const dispatch = useFormDispatch();
 
     return (
-        <button onClick={() => dispatch({type: "addNewInputField"})}>
-            Add field
-        </button>
+        <div className="add-button">
+            <button onClick={() => dispatch({type: "addNewInputField"})}>
+                <i className="fa fa-plus icon"></i>
+            </button>
+        </div>
     );
 };
 
@@ -23,23 +25,26 @@ const EditStatic = ({label, index, type}) => {
                 placeholder="Header..."
                 value={label}
             />
-            <div className="type">
-                <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', value: e.target.value})} value={type}>
-                    <option value="text">
-                        Text input
-                    </option>
-                    <option value="number">
-                        Number input
-                    </option>
-                    <option value="title">
-                        Title
-                    </option>
-                </select>
-            </div>
-            <div className="remove">
-                <button onClick={() => dispatch({type: 'deleteControl', index})}>
-                    Delete
-                </button>
+            <div className="editable-functions">
+                <div className="type">
+                    <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', value: e.target.value})} value={type}>
+                        <option value="text">
+                            Text input
+                        </option>
+                        <option value="number">
+                            Number input
+                        </option>
+                        <option value="title">
+                            Title
+                        </option>
+                    </select>
+                </div>
+            
+                <div className="remove">
+                    <button onClick={() => dispatch({type: 'deleteControl', index})}>
+                        <i className="fa fa-trash icon"></i>
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -57,33 +62,37 @@ const EditInput = ({type, index, label, required}) => {
                     value={label}
                 />
             </label>
-            <div className="required">
-                <label>
-                    Required Field
-                    <input 
-                        type="checkbox"
-                        checked={required}
-                        onChange={() => dispatch({type: 'editFieldValue', index, key: 'required', value: !required})}
-                    />
-                </label>
-            </div>
-            <div className="type">
-                <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', value: e.target.value})} value={type}>
-                    <option value="text">
-                        Text input
-                    </option>
-                    <option value="number">
-                        Number input
-                    </option>
-                    <option value="title">
-                        Title
-                    </option>
-                </select>
-            </div>
-            <div className="remove">
-                <button onClick={() => dispatch({type: 'deleteControl', index})}>
-                    Delete
-                </button>
+            <div className="editable-functions">
+                <div className="type">
+                    <select onChange={e => dispatch({type: 'editFieldValue', index, key: 'type', value: e.target.value})} value={type}>
+                        <option value="text">
+                            Text input
+                        </option>
+                        <option value="number">
+                            Number input
+                        </option>
+                        <option value="title">
+                            Title
+                        </option>
+                    </select>
+                </div>
+                <div className="float-right">
+                    <div className="required">
+                        <input 
+                            id="toggle"
+                            type="checkbox"
+                            checked={required}
+                            onChange={() => dispatch({type: 'editFieldValue', index, key: 'required', value: !required})}
+                        />
+                        <label for="toggle">Required Field</label>
+                    </div>
+                
+                    <div className="remove">
+                        <button onClick={() => dispatch({type: 'deleteControl', index})}>
+                            <i className="fa fa-trash icon"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -107,7 +116,7 @@ const Text = ({label, required}) => (
             {label}
             {
                 required
-                && <span className="error">*</span>
+                && <span className="error">REQUIRED</span>
             }
         </label>
         <input 
@@ -122,7 +131,7 @@ const NumberComp = ({label, required}) => (
             {label}
             {
                 required
-                && <span className="error">*</span>
+                && <span className="error">REQUIRED</span>
             }
         </label>
         <input 
@@ -131,11 +140,13 @@ const NumberComp = ({label, required}) => (
     </>
 );
 
-const Title = ({label}) => (
+const Title = ({label}) => {
+    return (
     <div className="display-mode">
         <h3>{label}</h3>
     </div>
-);
+    )
+}
 
 const controlForType = {
     text: Text,
