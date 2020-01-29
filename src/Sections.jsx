@@ -58,7 +58,18 @@ const SectionControls = () => {
     );
 };
 
+const SectionTitle = () => {
+    const {sections, sectionIndex} = useFormState();
+
+    return (
+        <div className="section-title">
+            Section {sectionIndex + 1} of {sections.length} 
+        </div>
+    );
+};
+
 export {
     Section,
-    SectionControls
+    SectionControls,
+    SectionTitle
 };
