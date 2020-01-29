@@ -42,11 +42,11 @@ header h1{color:#fff; font-size:20px}
     flex-direction: column;
     align-items: center;
     width: 100%;
+    margin:10px 0;
 
     button {
         cursor: pointer;
-        border: none; background:none; font-size:20px; right:0;
-        .icon {font-size: 24px;}
+        border: none; background:none; right:0;
     }
 }
 
@@ -58,7 +58,7 @@ header h1{color:#fff; font-size:20px}
 
 
 /* toggle switch */
-.required {  width:45px; border-right:1px solid #ddd;position: relative; }
+.required {  width:40px; border-right:1px solid #ddd;position: relative; }
 .required input[type=checkbox] {height: 0; width: 0; visibility: hidden;}
 .required input:checked+label {background: #69B74A;}
 .required label:active:after {width: 10px;}
@@ -66,7 +66,7 @@ header h1{color:#fff; font-size:20px}
 .required label {
     text-align:left;
     cursor: pointer;
-    text-indent: -85px;
+    text-indent: -60px;
     width: 40px;
     height: 20px;
     background: grey;
