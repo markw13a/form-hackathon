@@ -63,7 +63,7 @@ const SectionTitle = () => {
 
     return (
         <div className="section-title">
-            Section {sectionIndex + 1} of {sections.length} 
+            Section {sectionIndex + 1} / {sections.length} 
         </div>
     );
 };
