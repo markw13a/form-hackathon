@@ -39,11 +39,15 @@ const EditStatic = ({label, index, type}) => {
                         </option>
                     </select>
                 </div>
-            
-                <div className="remove">
-                    <button onClick={() => dispatch({type: 'deleteControl', index})}>
-                        <i className="fa fa-trash icon"></i>
-                    </button>
+                <div className="float-right">
+                    <div className="copy">
+                        <i className="fa fa-copy icon"></i>
+                    </div>
+                    <div className="remove">
+                        <button onClick={() => dispatch({type: 'deleteControl', index})}>
+                            <i className="fa fa-trash icon"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,7 +90,9 @@ const EditInput = ({type, index, label, required}) => {
                         />
                         <label for="toggle">Required Field</label>
                     </div>
-                
+                    <div className="copy">
+                        <i className="fa fa-copy icon"></i>
+                    </div>
                     <div className="remove">
                         <button onClick={() => dispatch({type: 'deleteControl', index})}>
                             <i className="fa fa-trash icon"></i>
