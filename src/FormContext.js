@@ -5,18 +5,19 @@ const FormStateContext = React.createContext();
 const FormDispatchContext = React.createContext();
 
 const controlSchema = {
-    label: null,
+    label: "Type your question",
     required: false,
     type: "text",
 };
 
 const staticSchema = {
-    label: "Heading",
+    label: "Type your heading",
     type: "title",
 };
 
 // Will need to deep copy when using to avoid the same "controls" array being referenced by multiple sections
 const sectionSchema = {
+    sectionName: 'Unnamed section',
     controls: [
         {
             ...staticSchema
@@ -60,6 +61,13 @@ const reducer = (form, action) => {
                 throw new Error(`setValue must be called with a value and key. You provided value: ${value}, key: ${key}`);
             }
             return {...form, [key]: value};
+        }
+        case 'changeSectionName': {
+            const {value} = action;
+            const {sectionIndex, sections} = form;
+            sections[sectionIndex].sectionName = value;
+
+            return {...form};
         }
         case 'addNewSection': {
             let {sections} = form;
