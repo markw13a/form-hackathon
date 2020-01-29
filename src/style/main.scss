@@ -1,8 +1,12 @@
-$large_font: 22px;
+$medium_font: 1.5rem;
+$large_font: 2.25rem;
 $disabled_colour: #d5d5d5;
 
-html {background: #F7F7F7 }
-body * { font-family: 'Open Sans', sans-serif; font-size:12px; color:#000000DE;}
+html {
+    background: #F7F7F7;
+    font-size: 16px;
+}
+body * { font-family: 'Open Sans', sans-serif; color:#000000DE;}
 
 .icon {font-size:16px; cursor: pointer;}
 .field input, .field select {border:1px solid #D5D5D5; padding:5px}
@@ -30,22 +34,22 @@ header h1{color:#fff; font-size:20px}
     line-height: 96px; 
     background-color: #fff; 
     padding: 0 72px;
-
-    .default {
-        color: #D5D5D5;
-    }
+}
+.default {
+    color: #D5D5D5;
 }
 .section-title {
     display: flex;
     flex-direction: row;
     background-color: #fff;
     margin: 0 auto;
-    width: 80%;
+    width: 60%;
+    min-width: 700px;
 
     .current-section {
         color: #fff;
         background-color: #595959;
-        font-size: $large_font;
+        font-size: $medium_font;
         padding: 1rem;
     }
 
@@ -66,7 +70,7 @@ header h1{color:#fff; font-size:20px}
             background: none;
 
             i {
-                font-size: $large_font;
+                font-size: $medium_font;
             }
 
             &:disabled {
@@ -83,12 +87,12 @@ header h1{color:#fff; font-size:20px}
         margin-left: 1rem;
 
         input {
-            font-size: $large_font;
+            font-size: $medium_font;
             border: none;
         }
     }
 }
-#form-name { font-size: $large_font; border:0 none; margin:0 }
+#form-name { font-size: $medium_font; border:0 none; margin:0 }
 
 /* Edit mode */
 .field {background:#fff; border:1px solid #D5D5D5; padding:30px}
@@ -103,7 +107,7 @@ header h1{color:#fff; font-size:20px}
     button {
         cursor: pointer;
         border: none; background:none; font-size:36px;
-        .icon {font-size: $large_font;}
+        .icon {font-size: $medium_font;}
     }
 }
 
@@ -123,7 +127,7 @@ header h1{color:#fff; font-size:20px}
 .required label {
     text-align:left;
     cursor: pointer;
-    text-indent: -60px;
+    text-indent: -75px;
     width: 40px;
     height: 20px;
     background: grey;
@@ -160,7 +164,8 @@ header h1{color:#fff; font-size:20px}
 
 .section {
     margin: 0 auto; 
-    width:80%;
+    width: 60%;
+    min-width: 700px;
 }
 .display-mode {
    position: relative;
