@@ -1,25 +1,26 @@
 import React from 'react';
 import {FormProvider} from './FormContext';
-import FormTitleCapture from './FormTitleCapture';
-import {AddNewField} from './Field';
-import {Section, SectionTitle} from './Sections';
-import SuccessfulSave from './SuccessfulSave';
+import Header from './Header';
+import FormFields from './FormFields';
+import Section from './Sections';
 import './style/main.scss';
 
-const App = () => (
+const AppContainer = ({children}) => (
 	<div className="App">
-		<header><h1>Chameleon Form Builder</h1></header>
 		<div className="content">
-			<FormProvider>
-				<FormTitleCapture />
-				<SectionTitle />
-				<div className="section">
-					<Section />
-					<AddNewField />
-				</div>
-			</FormProvider>
+			{children}
 		</div>
 	</div>
+);
+
+const App = () => (
+	<FormProvider>
+		<AppContainer>
+			<Header />
+			<Section />
+			<FormFields />
+		</AppContainer>
+	</FormProvider>
 );
 
 export default App;

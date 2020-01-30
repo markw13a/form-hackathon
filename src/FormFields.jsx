@@ -1,5 +1,5 @@
 import React from 'react';
-import {useFormDispatch} from './FormContext';
+import {useFormDispatch, useFormState} from './FormContext';
 import {useIsInFocus} from './common/Hooks';
 
 const AddNewField = () => {
@@ -194,23 +194,32 @@ const Field = props => {
     );
 };
 
-const FormFields = ({controls}) => {
+const FormFields = () => {
+    const form = useFormState();
+    const {sectionIndex} = form;
+
+    const section = form.sections[sectionIndex];
+
+    if(!section) {
+        throw new Error(`No data found for requested section at index ${sectionIndex}`);
+    }
+
+    const {controls} = section;
 
     if(controls.length === 0) {
         return null;
     }
 
     return (
-        <div>
-            {
-                controls.map((control, index) => <Field {...control} index={index} key={index} />)
-            }
-        </div>
-
+        <>
+            <div className="form-fields">
+                {
+                    controls.map((control, index) => <Field {...control} index={index} key={index} />)
+                }
+            </div>
+            <AddNewField />
+        </>
     );
 };
 
-export {
-    AddNewField,
-    FormFields
-};
+export default FormFields;

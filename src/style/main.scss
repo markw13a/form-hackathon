@@ -216,3 +216,15 @@ i.fa {
     font-style: italic;
     font-weight: bold;
 }
+
+.form-fields {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    align-items: center;
+    margin: auto;
+
+    .field {
+        width: 100%;
+    }
+}

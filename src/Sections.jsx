@@ -1,22 +1,6 @@
 import React from 'react';
 import {useFormState, useForm} from './FormContext';
-import {FormFields} from './Field';
 import {useIsInFocus} from './common/Hooks';
-
-const Section = () => {
-    const form = useFormState();
-    const {sectionIndex} = form;
-
-    const section = form.sections[sectionIndex];
-
-    if(!section) {
-        throw new Error(`No data found for requested section at index ${sectionIndex}`);
-    }
-
-    return (
-        <FormFields controls={section.controls} />
-    );
-};
 
 const SectionName = () => {
     const [{sections, sectionIndex}, dispatch] = useForm();
@@ -77,22 +61,22 @@ const SectionControls = () => {
     );
 };
 
-const SectionTitle = () => {
+const SectionLabel = () => {
     const {sections, sectionIndex} = useFormState();
 
     return (
-        <div className="section-title">
-            <div className="current-section">
-                Section {sectionIndex + 1} / {sections.length} 
-            </div>
-            <SectionName />
-            <SectionControls />
+        <div className="current-section">
+            Section {sectionIndex + 1} / {sections.length} 
         </div>
     );
-};
+}
 
-export {
-    Section,
-    SectionControls,
-    SectionTitle
-};
+const Section = () => (
+    <div className="section-title">
+        <SectionLabel />
+        <SectionName />
+        <SectionControls />
+    </div>
+);
+
+export default Section;
