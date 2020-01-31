@@ -1,41 +1,57 @@
 import React, {useReducer} from 'react';
 import debounce from 'lodash.debounce';
+import uuid from 'uuid/v4';
 
 const FormStateContext = React.createContext();
 const FormDispatchContext = React.createContext();
 
-const controlSchema = {
-    label: "Type your question",
-    required: false,
-    type: "text",
-};
-
 const staticSchema = {
+    uuid: null,
     label: "Type your heading",
     type: "title",
 };
+const controlSchema = {
+    uuid: null,
+    label: "Type your question",
+    type: "text",
+    required: false
+};
+const newControlSchema = isStatic => ({
+    ...(
+        isStatic
+        ? staticSchema
+        : controlSchema
+    ),
+    uuid: uuid()
+});
 
 // Will need to deep copy when using to avoid the same "controls" array being referenced by multiple sections
 const sectionSchema = {
-    sectionName: 'Unnamed section',
+    uuid: null,
+    name: 'Unnamed section',
     controls: [
         {
             ...staticSchema
         }
     ]
 };
-const newSectionSchema = () => JSON.parse(JSON.stringify(sectionSchema));
+const newSectionSchema = () => (
+    JSON.parse(JSON.stringify({
+        ...sectionSchema,
+        uuid: uuid()
+    }))
+);
 
 const initialState = {
-    title: "Untitled form",
     sectionIndex: 0,
-    hasChanges: false,
-    successfulSave: false,
-    sections: [
-        {
-            ...newSectionSchema()
-        }
-    ]
+    changes: [],
+    saveStatus: null,
+    form: {
+        title: "Untitled form",
+        sections: [
+            newSectionSchema()
+        ]
+    }
 };
 
 const onSave = (form, dispatch) => (
@@ -49,146 +65,170 @@ const onSave = (form, dispatch) => (
     .then(() => dispatch({type: 'setValue', key: 'hasChanges', value: false}))
     .catch(err => {
         dispatch({type: 'setValue', key: 'hasChanges', value: false});
-        dispatch({type: 'setSuccessfulSave', value: true})
+        dispatch({type: 'setSaveStatus', value: true})
         console.error(err);
     })
 );
 const debouncedOnSave = debounce(onSave, 5000);
 
-const reducer = (form, action) => {
+const reducer = (state, action) => {
     switch (action.type) {
-        case 'setValue': {
-            const {value, key} = action;
+        case 'setSectionIndex': {
+            const {value} = action;
+            const {form: sections} = state;
 
-            if(value === undefined || !key) {
-                throw new Error(`setValue must be called with a value and key. You provided value: ${value}, key: ${key}`);
+            if(value >= sections.length || value < 0) {
+                throw new Error(`Invalid section index: ${value}`)
             }
-            return {...form, [key]: value};
+
+            return {
+                ...state, 
+                sectionIndex: value
+            };
         }
         case 'changeSectionName': {
-            const {value} = action;
-            const {sectionIndex, sections} = form;
-            sections[sectionIndex].sectionName = value;
+            const {value, uuid} = action;
+            const {form} = state;
+            const sections = [...form.sections];
+            
+            // Update the section that has uuid = action.uuid
+            const index = sections.findIndex( section => section.uuid === uuid );
+            sections[index].name = value;
 
-            return {...form};
+            return {
+                ...state,
+                form: {
+                    ...form,
+                    sections
+                }
+            };
         }
         case 'addNewSection': {
-            let {sections} = form;
-            // Add new section then switch to it
+            const {form} = state;
+            const sections = [
+                ...form.sections,
+                newSectionSchema()
+            ];
+
+            // TODO: update changes array as a side-effect
+            // TODO: switch section index as a side-effect
+
             return {
-                ...form,
-                sectionIndex: sections.length,
-                sections: [
-                    ...sections, 
-                    {...newSectionSchema()}
-                ] ,
-                hasChanges: true
+                ...state,
+                form: {
+                    ...form,
+                    sections
+                }
             };   
         }
         case 'deleteSection': {
             // Delete given section and move to the next one down
-            const {sections, sectionIndex} = form;
-
-            if(sections.length === 0) {
+            const {uuid} = action;
+            const {form} = state;
+            let sections = [...form.sections];
+            
+            if(sections.length === 1) {
                 console.warn("Cannot remove your last section. Aborting...");
-                return form;
+                return state;
             }
 
-            sections.splice(sectionIndex, 1);
+            sections = sections.filter(section => section.uuid !== uuid);
+
+            // TODO: switch section index as a side-effect
+
             return {
-                ...form,
-                sectionIndex: 
-                    sectionIndex === 0 
-                        ? 0
-                        : form.sectionIndex - 1
-                        ,
+                ...state,
+                form: {
+                    ...form,
+                    sections
+                }
+            };
+        }
+        case 'addNewField': {
+            const {form} = state;
+            // TODO: change addNewInputField so that it passes down entire section that it belongs to.
+            const {section, isStatic} = action;
+            const {uuid} = section;
+
+            const sections = [...form.sections];
+            const index = sections.findIndex( section => section.uuid === uuid );
+            sections[index].controls = [
+                ...sections[index].controls,
+                newControlSchema(isStatic)
+            ];
+
+            // TODO: update changes array as a side-effect
+
+            return {
+                ...form, 
                 sections,
-                hasChanges: true
             };
         }
-        case 'switchToNextSection': {
-            return {
-                ...form, 
-                sectionIndex: form.sectionIndex + 1
-            };
-        }
-        case 'switchToPreviousSection': {
-            return {
-                ...form, 
-                sectionIndex: form.sectionIndex - 1
-            };
-        }
-
-        case 'addNewInputField': {
-            const {sectionIndex} = form;
-            const sections = [...form.sections];
-            const section = sections[sectionIndex];            
-            section.controls = [...section.controls, {...controlSchema}];
-
-            return {
-                ...form, 
-                sections: [...sections],
-                hasChanges: true
-            };
-        }
-
-        case 'addNewStaticField': {
-            const {sectionIndex} = form;
-            const sections = [...form.sections];
-            const section = sections[sectionIndex];
-            section.controls = [...section.controls, {...staticSchema}];
-
-            return {
-                ...form, 
-                sections: [...sections],
-                hasChanges: true
-            };
-        }
-
         case 'editFieldValue': {
-            // HACK: using index to identify a control could back-fire
-            const {sectionIndex} = form;
-            const {value, index, key} = action;
-            const section = form.sections[sectionIndex];
-            const controls = [...section.controls];
+            const {form} = state;
+            const {value, control, key} = action;
+            const {uuid} = control;
 
-            if(!section || !controls || !controls[index]) {
+            const sections = [...form.sections];
+            // TODO: should we change this so that the section id is passed along with the dispatch call?
+            // Could also make it so that controls always carry a "section ID" property themselves. Fine as long as we're okay with controls being locked to a specific section
+            // Find section that contains the control that we want to update
+            const sectionIndex = sections.findIndex(section => 
+                section.controls.some(control => control.uuid === uuid)
+            );
+            const controlIndex = sections[sectionIndex].controls.findIndex(control => 
+                control.uuid === uuid    
+            );
+
+            const section = sections[sectionIndex];
+            const controls = section.controls;
+
+            if(!section || !controls || !controls[controlIndex]) {
                 throw new Error(`Section or control specified does not appear to exist. Section: ${section}, controls: ${controls}`);
             }
 
-            if(value === undefined || index === undefined || !key) {
-                throw new Error(`editFieldValue must be called with a value, key and index. You provided value: ${value}, key: ${key}, index: ${index}`);
+            if(value === undefined || controlIndex === undefined || !key) {
+                throw new Error(`editFieldValue must be called with a value, key and index. You provided value: ${value}, key: ${key}, index: ${controlIndex}`);
             }
 
-            controls[index][key] = value; 
+            controls[controlIndex][key] = value; 
 
             return {
-                ...form, 
-                sections: [...form.sections],
-                hasChanges: true
+                ...state,
+                form: {
+                    ...form,
+                    sections
+                }
             };
         }
-
         case 'deleteControl': {
-            const {sectionIndex} = form;
-            const {index} = action;
+            const {form} = state;
+            const {control} = action;
+            const {uuid} = control;
+
+            const sections = [...form.sections];
+
+            const sectionIndex = sections.findIndex(section => 
+                section.controls.some(control => control.uuid === uuid)
+            );
+            const controlIndex = sections[sectionIndex].controls.findIndex(control => 
+                control.uuid === uuid    
+            );
 
             const section = form.sections[sectionIndex];
-            section.controls.splice(index, 1);
+            section.controls.splice(controlIndex, 1);
 
             return {
                 ...form, 
-                sections: [...form.sections],
-                hasChanges: true
+                sections,
             };
         }
-
-        case 'setSuccessfulSave': {
+        case 'setSaveStatus': {
             const {value} = action;
 
             return {
-                ...form, 
-                successfulSave: value
+                ...state, 
+                saveStatus: value
             };
         }
 
@@ -204,6 +244,8 @@ const FormProvider = ({children}) => {
     if(form.hasChanges) {
         debouncedOnSave(form, dispatch);
     }
+
+    console.warn("initialState", initialState);
 
     return (
         <FormStateContext.Provider value={form}>

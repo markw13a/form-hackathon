@@ -3,10 +3,10 @@ import {useFormState, useForm} from './FormContext';
 import {useIsInFocus} from './common/Hooks';
 
 const SectionName = () => {
-    const [{sections, sectionIndex}, dispatch] = useForm();
+    const [{form, sectionIndex}, dispatch] = useForm();
+    console.warn(form);
     const {isInFocus, onFocus, onBlur} = useIsInFocus();
-
-    const {sectionName} = sections[sectionIndex];
+    const {name} = form.sections[sectionIndex];
 
     return (
         <div 
@@ -18,14 +18,14 @@ const SectionName = () => {
                 className={ isInFocus ? null : "default" }
                 type="text"
                 onChange={e => dispatch({type: "changeSectionName", value: e.target.value})}
-                value={sectionName}
+                value={name}
             />
         </div>
     );
 };
 
 const SectionControls = () => {
-    const [form, dispatch] = useForm();
+    const [{form}, dispatch] = useForm();
 
     const {sectionIndex} = form;
     const numberOfSectons = form.sections.length;
@@ -34,14 +34,14 @@ const SectionControls = () => {
         <div className="section-buttons">
             <div className="row">
                 <button 
-                    onClick={() => dispatch({type: "switchToPreviousSection"})}
+                    onClick={() => dispatch({type: "setSectionIndex", value: sectionIndex - 1})}
                     disabled={ numberOfSectons < 1 || sectionIndex === 0 }
                 >
                     <i className="fa fa-arrow-left" />
                 </button>
                 <button 
-                    onClick={() => dispatch({type: "switchToNextSection"})}
-                    disabled={ numberOfSectons < 1 || sectionIndex === numberOfSectons -1 }
+                    onClick={() => dispatch({type: "setSectionIndex", value: sectionIndex + 1})}
+                    disabled={ numberOfSectons < 1 || sectionIndex === numberOfSectons - 1 }
                 >
                     <i className="fa fa-arrow-right" />
                 </button>
@@ -62,7 +62,7 @@ const SectionControls = () => {
 };
 
 const SectionLabel = () => {
-    const {sections, sectionIndex} = useFormState();
+    const {form: {sections, sectionIndex}} = useFormState();
 
     return (
         <div className="current-section">
