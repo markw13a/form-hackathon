@@ -195,8 +195,7 @@ const Field = props => {
 };
 
 const FormFields = () => {
-    const form = useFormState();
-    const {sectionIndex} = form;
+    const {form, sectionIndex} = useFormState();
 
     const section = form.sections[sectionIndex];
 

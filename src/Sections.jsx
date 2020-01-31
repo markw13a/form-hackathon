@@ -17,7 +17,11 @@ const SectionName = () => {
             <input 
                 className={ isInFocus ? null : "default" }
                 type="text"
-                onChange={e => dispatch({type: "changeSectionName", value: e.target.value})}
+                onChange={e => dispatch({
+                    type: "changeSectionName",
+                    uuid: form.sections[sectionIndex].uuid, 
+                    value: e.target.value
+                })}
                 value={name}
             />
         </div>
@@ -25,9 +29,7 @@ const SectionName = () => {
 };
 
 const SectionControls = () => {
-    const [{form}, dispatch] = useForm();
-
-    const {sectionIndex} = form;
+    const [{form, sectionIndex}, dispatch] = useForm();
     const numberOfSectons = form.sections.length;
 
     return (
@@ -62,7 +64,7 @@ const SectionControls = () => {
 };
 
 const SectionLabel = () => {
-    const {form: {sections, sectionIndex}} = useFormState();
+    const {form: {sections}, sectionIndex} = useFormState();
 
     return (
         <div className="current-section">

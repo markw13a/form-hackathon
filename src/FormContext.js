@@ -91,6 +91,10 @@ const reducer = (state, action) => {
             const {form} = state;
             const sections = [...form.sections];
             
+            if(value === undefined || !uuid) {
+                throw new Error(`changeSectionName must be provided with a valid value and uuid. You provided value: ${value}, uuid: ${uuid}`);
+            }
+
             // Update the section that has uuid = action.uuid
             const index = sections.findIndex( section => section.uuid === uuid );
             sections[index].name = value;
