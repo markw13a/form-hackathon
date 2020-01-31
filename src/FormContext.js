@@ -115,8 +115,6 @@ const reducer = (state, action) => {
             ];
 
             // TODO: update changes array as a side-effect
-            // TODO: switch section index as a side-effect
-
             return {
                 ...state,
                 form: {
@@ -131,14 +129,16 @@ const reducer = (state, action) => {
             const {form} = state;
             let sections = [...form.sections];
             
+            if(!uuid) {
+                throw new Error(`deleteSection must be called with a valid uuid. You provided uuid: ${uuid}`);
+            }
+
             if(sections.length === 1) {
                 console.warn("Cannot remove your last section. Aborting...");
                 return state;
             }
 
             sections = sections.filter(section => section.uuid !== uuid);
-
-            // TODO: switch section index as a side-effect
 
             return {
                 ...state,
@@ -243,16 +243,16 @@ const reducer = (state, action) => {
 };
 
 const FormProvider = ({children}) => {
-    const [form, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
 
-    if(form.hasChanges) {
-        debouncedOnSave(form, dispatch);
+    if(state.hasChanges) {
+        debouncedOnSave(state.form, dispatch);
     }
 
     console.warn("initialState", initialState);
 
     return (
-        <FormStateContext.Provider value={form}>
+        <FormStateContext.Provider value={state}>
             <FormDispatchContext.Provider value={dispatch}>
                 {children}
             </FormDispatchContext.Provider>

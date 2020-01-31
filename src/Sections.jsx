@@ -32,28 +32,47 @@ const SectionControls = () => {
     const [{form, sectionIndex}, dispatch] = useForm();
     const numberOfSectons = form.sections.length;
 
+    const goToPreviousSection = () => {
+        dispatch({type: "setSectionIndex", value: sectionIndex - 1});
+    };
+    const goToNextSection = () => {
+        dispatch({type: "setSectionIndex", value: sectionIndex + 1});
+    };
+    const addNewSection = () => {
+        dispatch({type: "addNewSection"});
+    };
+    const deleteSection = () => {
+        dispatch({type: "deleteSection", uuid: form.sections[sectionIndex].uuid});
+    };
+
     return (
         <div className="section-buttons">
             <div className="row">
                 <button 
-                    onClick={() => dispatch({type: "setSectionIndex", value: sectionIndex - 1})}
+                    onClick={goToPreviousSection}
                     disabled={ numberOfSectons < 1 || sectionIndex === 0 }
                 >
                     <i className="fa fa-arrow-left" />
                 </button>
                 <button 
-                    onClick={() => dispatch({type: "setSectionIndex", value: sectionIndex + 1})}
+                    onClick={goToNextSection}
                     disabled={ numberOfSectons < 1 || sectionIndex === numberOfSectons - 1 }
                 >
                     <i className="fa fa-arrow-right" />
                 </button>
             </div>
             <div className="row">
-                <button onClick={() => dispatch({type: "addNewSection"})}>
+                <button onClick={() => {
+                    addNewSection();
+                    goToNextSection();
+                }}>
                     <i className="fa fa-plus icon" />
                 </button>
                 <button 
-                    onClick={() => dispatch({type: "deleteSection"})}
+                    onClick={() => {
+                        deleteSection();
+                        goToPreviousSection();
+                    }}
                     disabled={numberOfSectons <= 1}
                 >
                     <i className="fa fa-trash icon" />
